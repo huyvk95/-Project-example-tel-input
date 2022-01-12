@@ -1,9 +1,12 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "example-tel-input": {
+    "btn-wbo": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -15,75 +18,110 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "btn",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/example-tel-input",
+            "outputPath": "dist/btn-wbo",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
+            "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              },
+              {
+                "input": "./node_modules/@google/markerclustererplus/images",
+                "glob": "*",
+                "output": "/images"
+              }
             ],
             "styles": [
+              "./node_modules/intl-tel-input/build/css/intlTelInput.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "element-resize-detector",
+              "file-saver",
+              "pdfjs-dist/es5/build/pdf",
+              "pdfjs-dist/es5/web/pdf_viewer",
+              "iban",
+              "lodash"
+            ]
           },
           "configurations": {
             "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "aot": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "10mb",
+                  "maximumError": "15mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
+                }
+              ]
             },
-            "development": {
-              "buildOptimizer": false,
+            "quick_build": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": false,
-              "vendorChunk": true,
+              "outputHashing": "bundles",
+              "sourceMap": false,
+              "namedChunks": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
+              "vendorChunk": true,
+              "buildOptimizer": false,
+              "aot": true,
+              "showCircularDependencies": false,
+              "statsJson": false,
+              "progress": false
             }
-          },
-          "defaultConfiguration": "production"
+          }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "btn-wbo:build"
+          },
           "configurations": {
             "production": {
-              "browserTarget": "example-tel-input:build:production"
-            },
-            "development": {
-              "browserTarget": "example-tel-input:build:development"
+              "browserTarget": "btn-wbo:build:production"
             }
-          },
-          "defaultConfiguration": "development"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "example-tel-input:build"
+            "browserTarget": "btn-wbo:build"
           }
         },
         "test": {
@@ -93,19 +131,36 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "btn-wbo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "btn-wbo:serve:production"
+            }
           }
         }
       }
     }
   },
-  "defaultProject": "example-tel-input"
+  "defaultProject": "btn-wbo"
 }

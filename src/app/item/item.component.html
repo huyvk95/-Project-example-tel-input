@@ -1,0 +1,36 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="margin: 50px">
+  <h1>Test International Telephone Input Form</h1>
+  <h2>Angular 12</h2>
+  <form [formGroup]="form">
+    <div class="wrapper">
+      <ngx-intl-tel-input
+        btnNotDotNumber
+        #intlTelInput
+        [cssClass]="''"
+        [enableAutoCountrySelect]="true"
+        [enablePlaceholder]="true"
+        [searchCountryFlag]="true"
+        [searchCountryField]="[
+          SearchCountryField.Iso2,
+          SearchCountryField.Name
+        ]"
+        [maxLength]="(15).toString()"
+        [tooltipField]="TooltipLabel.Name"
+        [phoneValidation]="false"
+        [separateDialCode]="true"
+        [selectedCountryISO]="selectedCountryISO"
+        [formControl]="phoneControl"
+        (paste)="onHandlePaste($event)"
+        (input)="onHandleChange($event)"
+        (focusout)="onHandleBlur($event)"
+        (click)="onHandleFocus($event)"
+      >
+      </ngx-intl-tel-input>
+    </div>
+  </form>
+  <br />
+  <ng-template #error>
+    <btn-error-messages [errors]="phoneNumber.errors"></btn-error-messages>
+  </ng-template>
+</div>
